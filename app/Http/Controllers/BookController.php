@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookPutFormRequest;
+use App\Http\Requests\BookStoreFormRequest;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use App\Models\Pivot\BookUser;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
 class BookController extends Controller
@@ -18,22 +21,18 @@ class BookController extends Controller
 
     public function edit(Book $book, Request $request){
 
-        if(!$book = $request->user()->books->find($book->id)){
+        if ($request->user()->cannot('update', $book)) {
             abort(403);
         }
+
+        $book = $request->user()->books->find($book->id);
 
         return view('books.edit', [
             'book' => $book
         ]);
     }
 
-    public function store(Request $request){
-
-        $this->validate($request, [
-            'title' => 'required',
-            'author' => 'required',
-            'status' => ['required', Rule::in(array_keys(BookUser::$statuses))],
-        ]);
+    public function store(BookStoreFormRequest $request){
 
         $book = Book::create($request->only('title', 'author'));
         $request->user()->books()->attach($book, [
@@ -43,16 +42,9 @@ class BookController extends Controller
         return redirect('/');
     }
 
-    public function update(Book $book, Request $request){
-        if(!$book = $request->user()->books->find($book->id)){
-            abort(403);
-        }
+    public function update(Book $book, BookPutFormRequest $request){
 
-        $this->validate($request, [
-            'title' => 'required',
-            'author' => 'required',
-            'status' => ['required', Rule::in(array_keys(BookUser::$statuses))],
-        ]);
+        $book = $request->user()->books->find($book->id);
 
         $book->update($request->only('title', 'author'));
         $request->user()->books()->updateExistingPivot($book, [

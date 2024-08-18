@@ -2,8 +2,9 @@
     <x-slot name="header">
         Edit book
     </x-slot>
-    <form action="/" method="post" class="mt-4 space-y-4">
+    <form action="/books/{{$book->id}}" method="post" class="mt-4 space-y-4">
         @csrf
+        @method('PUT')
         <div class="space-y-1">
             <label for="title" class="block">Title</label>
             <input type="text" name="title" id="title" class="rounded block w-full border-2	border-gray-300" value="{{ old('title') ?: $book->title }}">
