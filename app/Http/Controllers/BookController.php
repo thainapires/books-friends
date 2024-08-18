@@ -3,17 +3,31 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
-use App\Models\Pivot\BookUser;
 use Illuminate\Http\Request;
+use App\Models\Pivot\BookUser;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Validation\Rule;
 
-class BookStoreController extends Controller
+class BookController extends Controller
 {
-
     use ValidatesRequests;
 
-    public function index(Request $request){
+    public function create(Request $request){
+        return view('books.create');
+    }
+
+    public function edit(Book $book, Request $request){
+
+        if(!$book = $request->user()->books->find($book->id)){
+            abort(403);
+        }
+
+        return view('books.edit', [
+            'book' => $book
+        ]);
+    }
+
+    public function store(Request $request){
 
         $this->validate($request, [
             'title' => 'required',
