@@ -29,7 +29,7 @@
                     </li>
 
                     <li>
-                        <a href="" class="font-bold text-lg text-slate-600 hover:text-slate-800 block py-1">Friends</a>
+                        <a href="/friends" class="font-bold text-lg text-slate-600 hover:text-slate-800 block py-1">Friends</a>
                     </li>
                 </ul>
                 <ul>

@@ -44,9 +44,14 @@ it('can accept friends', function(){
 
     $friend->acceptFriend($user);
 
-    expect($user->acceptedFriendsOfMine)->toHaveCount(1);
-    expect($user->acceptedFriendsOfMine->pluck('id'))->toContain($friend->id);
+    //expect($user->acceptedFriendsOfMine)->toHaveCount(1);
+    //expect($user->acceptedFriendsOfMine->pluck('id'))->toContain($friend->id);
 
+    //High order expectation
+    expect($user->acceptedFriendsOfMine)
+        ->toHaveCount(1)
+        ->pluck('id')
+        ->toContain($friend->id);
 });
 
 it('can get all friend', function(){

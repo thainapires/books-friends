@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController, BookController, HomeController};
+use App\Http\Controllers\{AuthController, BookController, FriendController, HomeController};
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/auth/register', [AuthController::class, 'register'])->middleware('guest')->name('register');
@@ -11,3 +11,5 @@ Route::post('/books', [BookController::class, 'store'])->middleware('auth')->nam
 Route::get('/books/create', [BookController::class, 'create'])->middleware('auth')->name('books.create');
 Route::get('/books/{book}/edit', [BookController::class, 'edit'])->middleware('auth')->name('books.edit');
 Route::put('/books/{book}', [BookController::class, 'update'])->middleware('auth')->name('books.update');
+
+Route::get('/friends', [FriendController::class, 'index'])->middleware('auth')->name('friends');
