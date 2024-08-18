@@ -34,9 +34,15 @@ expect()->extend('toBeThai', function () {
 });
 
 expect()->extend('toBeRedirectedFor', function (string $url, string $method = 'get') {
-    return actingAs($this->value)
-        ->{$method}($url)
-        ->assertStatus(302);
+    $response = null;
+
+    if(!$this->value){
+        $response = test()->{$method}($url);
+    }else{
+        $response = actingAs($this->value)->{$method}($url);
+    }
+
+    return $response->assertStatus(302);
 });
 
 /*
@@ -53,4 +59,8 @@ expect()->extend('toBeRedirectedFor', function (string $url, string $method = 'g
 function actingAs(Authenticatable $user)
 {
     return test()->actingAs($user);
+}
+
+function expectGuest(){
+    return test()->expect(null);
 }

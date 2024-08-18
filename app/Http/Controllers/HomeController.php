@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index(){
-        return view('home');
+    public function index(Request $request){
+        return view('home', [
+            'booksByStatus' => $request->user()?->books->groupBy('pivot.status')
+        ]);
     }
 }

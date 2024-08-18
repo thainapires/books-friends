@@ -10,7 +10,7 @@ uses(RefreshDatabase::class);
 
 it('shows the login page')->get('/auth/login')->assertOk();
 
-it('redirects an unauthenticated user', function() {
+it('redirects an authenticated user', function() {
     expect(User::factory()->create())->toBeRedirectedFor('/auth/login');
 });
 

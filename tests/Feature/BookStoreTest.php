@@ -11,8 +11,7 @@ beforeEach(function() {
 });
 
 it('only allows authenticated user to post')
-    ->post('/books')
-    ->assertStatus(302);
+    ->expectGuest()->toBeRedirectedFor('/books', 'post');
 
 it('creates a book', function() {
     

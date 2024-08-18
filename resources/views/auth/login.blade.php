@@ -6,11 +6,11 @@
         @csrf
         <div class="space-y-1">
             <label for="email" class="block">Email address</label>
-            <input type="email" name="email" id="email" placeholder="e.g. you@somewhere.com" class="rounded block w-full">
+            <input type="email" name="email" id="email" placeholder="e.g. you@somewhere.com" class="rounded block w-full border-2 border-gray-300">
         </div>
         <div class="space-y-1">
             <label for="password" class="block">Password</label>
-            <input type="password" name="password" id="password" class="rounded block w-full">
+            <input type="password" name="password" id="password" class="rounded block w-full border-2 border-gray-300">
         </div>
         <button type="submit" class="bg-slate-200 px-3 py-2 rounded">
             Log in
