@@ -9,6 +9,10 @@ use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
+it('redirects an authenticated user', function() {
+    expect(User::factory()->create())->toBeRedirectedFor('/auth/register');
+});
+
 it('shows the register page')->get('/auth/register')->assertStatus(200);
 
 /*it('has errors if the details are not provided', function () {

@@ -8,14 +8,24 @@ use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
-it('redirects an authenticated user', function () {
-    $user = User::factory()->create();
-    $this->actingAs($user)
-        ->get('/auth/login')
-        ->assertStatus(302);
+it('shows the login page')->get('/auth/login')->assertOk();
+
+it('redirects an unauthenticated user', function() {
+    expect(User::factory()->create())->toBeRedirectedFor('/auth/login');
 });
 
-it('shows an error if details are ot provided')
+it('is Thai', function () {
+    expect('Thai')->toBeThai();
+});
+
+/*it('redirects an authenticated user', function () {
+    //$user = User::factory()->create();
+    actingAs(User::factory()->create())
+        ->get('/auth/login')
+        ->assertStatus(302);
+});*/
+
+it('shows an error if details are not provided')
     ->post('login')
     ->assertSessionHasErrors(['email', 'password']);
 
