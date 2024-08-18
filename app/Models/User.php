@@ -53,4 +53,50 @@ class User extends Authenticatable
             ->withPivot('status')
             ->withTimestamps();
     }
+
+    public function getFriendsAttribute(){
+        return $this->acceptedFriendsOfMine->merge($this->acceptedFriendsOf);
+    }
+
+    public function addFriend(User $friend){
+        $this->friendsOfMine()->syncWithoutDetaching($friend, [
+            'accepted' => false
+        ]);
+    }
+
+    public function friendsOfMine(){
+        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')
+            ->withPivot('accepted');
+    }
+
+    public function friendsOf(){
+        return $this->belongsToMany(User::class, 'friends', 'friend_id', 'user_id')
+            ->withPivot('accepted');
+    }
+
+    public function pendingFriendsOfMine(){
+        return $this->friendsOfMine()->wherePivot('accepted', false);
+    }
+
+    public function acceptedFriendsOf(){
+        return $this->friendsOf()->wherePivot('accepted', true);
+    }
+
+    public function acceptedFriendsOfMine(){
+        return $this->friendsOfMine()->wherePivot('accepted', true);
+    }
+
+    public function pendingFriendsOf(){
+        return $this->friendsOf()->wherePivot('accepted', false);
+    }
+
+    public function acceptFriend(User $friend){
+        $friend->friendsOfMine()->updateExistingPivot($this->id, [
+            'accepted' => true
+        ]);
+    }
+
+    public function removeFriend(User $friend){
+        $this->friendsOfMine()->detach($friend);
+    }
 }
