@@ -42,4 +42,24 @@ class BookController extends Controller
 
         return redirect('/');
     }
+
+    public function update(Book $book, Request $request){
+        if(!$book = $request->user()->books->find($book->id)){
+            abort(403);
+        }
+
+        $this->validate($request, [
+            'title' => 'required',
+            'author' => 'required',
+            'status' => ['required', Rule::in(array_keys(BookUser::$statuses))],
+        ]);
+
+        $book->update($request->only('title', 'author'));
+        $request->user()->books()->updateExistingPivot($book, [
+            'status' => $request->status
+        ]);
+
+        return redirect('/');
+        
+    }
 }
