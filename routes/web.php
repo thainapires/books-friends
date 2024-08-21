@@ -13,3 +13,6 @@ Route::get('/books/{book}/edit', [BookController::class, 'edit'])->middleware('a
 Route::put('/books/{book}', [BookController::class, 'update'])->middleware('auth')->name('books.update');
 
 Route::get('/friends', [FriendController::class, 'index'])->middleware('auth')->name('friends');
+Route::post('/friends', [FriendController::class, 'request'])->middleware('auth')->name('friends.request');
+Route::patch('/friends/{friend}', [FriendController::class, 'accept'])->middleware('auth')->name('friends.accept');
+Route::delete('/friends/{friend}', [FriendController::class, 'delete'])->middleware('auth')->name('friends.delete');
