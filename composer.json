@@ -8,7 +8,9 @@
         "php": "^8.2",
         "laravel/fortify": "^1.23",
         "laravel/framework": "^11.9",
-        "laravel/tinker": "^2.9"
+        "laravel/tinker": "^2.9",
+        "staudenmeir/eloquent-has-many-deep": "^1.7",
+        "staudenmeir/laravel-merged-relations": "^1.0"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

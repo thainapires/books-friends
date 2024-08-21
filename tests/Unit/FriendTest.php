@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -84,4 +85,36 @@ it('can remove a friend', function(){
     $user->removeFriend($friend);
     expect($user->friends)->toHaveCount(0);
     expect($friend->friends)->toHaveCount(0);
+});
+
+it('can get books of friend', function() {
+    $user = User::factory()->create();
+    $friendOne = User::factory()->create();
+    $friendTwo = User::factory()->create();
+    $friendThree = User::factory()->create();
+
+    $friendOne->books()->attach($bookOne = Book::factory()->create(), [
+        'status' => 'WANT_TO_READ',
+        'updated_at' => now(),
+    ]);
+
+    $friendTwo->books()->attach($bookTwo = Book::factory()->create(), [
+        'status' => 'WANT_TO_READ',
+        'updated_at' => now()->addDay(),
+    ]);
+
+    $friendThree->books()->attach($bookThree = Book::factory()->create(), [
+        'status' => 'WANT_TO_READ'
+    ]);
+
+    $user->addFriend($friendOne);
+    $friendOne->acceptFriend($user);
+
+    $friendTwo->addFriend($user);
+    $user->acceptFriend($friendTwo);
+
+    $user->addFriend($friendThree);
+
+    expect($user->booksOfFriends)->count()->toBe(2)->first()->title->toBe($bookTwo->title);
+
 });

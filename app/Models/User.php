@@ -9,10 +9,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Log;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
+use Staudenmeir\LaravelMergedRelations\Eloquent\HasMergedRelationships;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
+
+    use HasMergedRelationships;
+
+    use HasRelationships;
 
     /**
      * The attributes that are mass assignable.
@@ -55,8 +61,14 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
-    public function getFriendsAttribute(){
-        return $this->acceptedFriendsOfMine->merge($this->acceptedFriendsOf);
+    public function friends(){
+        return $this->mergedRelationWithModel(User::class, 'friends_view');
+    }
+
+    public function booksOfFriends(){
+        return $this->hasManyDeepFromRelations($this->friends(), (new User)->books())
+            ->withIntermediate(BookUser::class)
+            ->orderBy('__book_user__updated_at', 'desc');
     }
 
     public function addFriend(User $friend){
@@ -99,5 +111,6 @@ class User extends Authenticatable
 
     public function removeFriend(User $friend){
         $this->friendsOfMine()->detach($friend);
+        $this->friendsOf()->detach($friend);
     }
 }

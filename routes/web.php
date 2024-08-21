@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{AuthController, BookController, FriendController, HomeController};
+use App\Http\Controllers\{AuthController, BookController, FeedController, FriendController, HomeController};
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/auth/register', [AuthController::class, 'register'])->middleware('guest')->name('register');
@@ -16,3 +16,5 @@ Route::get('/friends', [FriendController::class, 'index'])->middleware('auth')->
 Route::post('/friends', [FriendController::class, 'request'])->middleware('auth')->name('friends.request');
 Route::patch('/friends/{friend}', [FriendController::class, 'accept'])->middleware('auth')->name('friends.accept');
 Route::delete('/friends/{friend}', [FriendController::class, 'delete'])->middleware('auth')->name('friends.delete');
+
+Route::get('/feed', [FeedController::class, 'index'])->middleware('auth')->name('feed');

@@ -13,4 +13,8 @@ class Book extends Model
         'title',
         'author'
     ];
+
+    public function user(){
+        return $this->belongsToMany(User::class)->withPivot('status');
+    }
 }
